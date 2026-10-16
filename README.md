@@ -1,53 +1,66 @@
 # Ederlyn H. Caparas — Portfolio
 
 A minimalist, editorial personal portfolio built by hand with **vanilla HTML5,
-CSS3, and JavaScript** — no framework, no build step. The only external script
-is [anime.js](https://animejs.com/) (loaded from a CDN) for subtle entrance
-motion; the site works fully even if it never loads.
-
-## Features
-
-- Semantic, accessible HTML5 (skip link, ARIA labels, `:focus-visible`)
-- Responsive layout with CSS Grid & Flexbox (mobile → desktop)
-- Persistent **dark / light theme** (`localStorage` + OS preference)
-- Tasteful scroll-reveal animations that honor `prefers-reduced-motion`
-- Responsive WebP portrait via `<picture>` (no layout shift)
-- Design informed by Apple's Human Interface Guidelines and Vercel's Web
-  Interface Guidelines (layered shadows, nested radii, hue-tinted borders)
+CSS3, and JavaScript** — no framework, no build step, no dependencies to
+install. The only external script is [anime.js](https://animejs.com/) (loaded
+from a CDN) for subtle entrance motion; the site works fully even if it never
+loads.
 
 ## Files
 
-| Path | Purpose |
+| File | Purpose |
 | --- | --- |
-| `index.html` | Content & structure |
+| `index.html` | Content & structure (semantic, accessible markup) |
 | `styles.css` | Styling, theme tokens, responsive layout, motion |
-| `script.js` | Theme toggle, scroll reveals, smooth scroll, dynamic year |
-| `assets/` | Portrait images in WebP (640w & 1280w) |
-| `scripts/` | **Optional** Node helpers (image conversion, placeholder, screenshots) |
-| `CODE_EXPLANATION.txt` | Beginner-friendly, line-by-line walkthrough + deploy guide |
+| `script.js` | Dark/light theme toggle, scroll reveals, smooth scroll, dynamic year |
+| `README.md` | This file |
 
-> The images in `assets/` are a generated placeholder. See
-> **[`CODE_EXPLANATION.txt`](CODE_EXPLANATION.txt) → Part 5** to drop in the real headshot.
+That's the whole project — four files, single folder, deploy anywhere.
+
+## Features
+
+- Semantic, accessible HTML5 (skip link, ARIA labels, `:focus-visible` rings)
+- Responsive layout with CSS Grid & Flexbox (mobile → desktop)
+- Persistent **dark / light theme** (`localStorage` + OS preference)
+- Tasteful scroll-reveal animations that honor `prefers-reduced-motion`
+- Design informed by Apple's Human Interface Guidelines and Vercel's Web
+  Interface Guidelines (layered shadows, nested radii, hue-tinted borders)
 
 ## Run locally
 
-Just open `index.html`, or serve the folder:
+Just open `index.html` in a browser, or serve the folder:
 
 ```bash
 python -m http.server 8000   # then visit http://localhost:8000
 ```
 
-## Deploy
+## Add a real photo (optional)
 
-Static files — host free on **GitHub Pages** or **Vercel**. Step-by-step
-instructions are in `CODE_EXPLANATION.txt` (Part 4).
+The hero currently shows an inline SVG monogram placeholder ("EC"). To use a
+real headshot:
 
-## Optional build helpers
+1. Put the image file next to `index.html` (e.g. `ederlyn.jpg`).
+2. In `index.html`, find the `<svg class="portrait" ...>...</svg>` block inside
+   `<figure class="hero__portrait">` and replace the whole `<svg>` with:
 
-The `scripts/` folder is only needed if you want to regenerate images or
-screenshots. Install dev dependencies first:
+   ```html
+   <img src="ederlyn.jpg" alt="Portrait of Ederlyn H. Caparas" />
+   ```
 
-```bash
-npm install
-npm run portrait -- raw/ederlyn.jpg ederlyn   # convert a photo to WebP
-```
+The CSS already crops it to a neat 5:6 portrait via `object-fit: cover`.
+
+## Deploy (free)
+
+Static files — host for free on **GitHub Pages** or **Vercel**.
+
+### GitHub Pages
+1. Push these files to a GitHub repo.
+2. Repo → **Settings → Pages** → Source **"Deploy from a branch"** →
+   Branch **`main`**, Folder **`/ (root)`** → Save.
+3. Wait ~1 minute; your site goes live at
+   `https://YOUR-USERNAME.github.io/REPO-NAME/`.
+
+### Vercel
+1. Push to a Git repo, then import it at [vercel.com](https://vercel.com).
+2. Framework Preset **"Other"**; leave Build Command and Output Directory empty.
+3. **Deploy** — you get a live URL in seconds. Future pushes auto-deploy.

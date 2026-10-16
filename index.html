@@ -93,13 +93,31 @@
         </div>
 
         <figure class="hero__portrait" data-reveal>
-          <picture>
-            <source type="image/webp"
-              srcset="assets/ederlyn-640.webp 640w, assets/ederlyn-1280.webp 1280w"
-              sizes="(min-width: 860px) 320px, 70vw" />
-            <img src="assets/ederlyn-640.webp" width="640" height="768"
-              alt="Portrait of Ederlyn H. Caparas" loading="eager" decoding="async" />
-          </picture>
+          <!-- Inline SVG monogram placeholder. To use a real photo, replace this
+               <svg>...</svg> with: <img src="ederlyn.jpg" alt="Portrait of Ederlyn H. Caparas"> -->
+          <svg class="portrait" viewBox="0 0 500 600" role="img"
+            aria-label="Portrait of Ederlyn H. Caparas" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2a2622" />
+                <stop offset="1" stop-color="#15120f" />
+              </linearGradient>
+              <radialGradient id="pglow" cx="0.5" cy="0.38" r="0.6">
+                <stop offset="0" stop-color="#c9743e" stop-opacity="0.42" />
+                <stop offset="1" stop-color="#c9743e" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <rect width="500" height="600" fill="url(#pg)" />
+            <rect width="500" height="600" fill="url(#pglow)" />
+            <circle cx="250" cy="276" r="130" fill="none" stroke="#e0a37a"
+              stroke-opacity="0.5" stroke-width="2" />
+            <text x="250" y="276" dy="0.36em" text-anchor="middle"
+              font-family="Georgia, 'Times New Roman', serif" font-size="150"
+              font-weight="600" fill="#f2e7dd" letter-spacing="4">EC</text>
+            <text x="250" y="500" text-anchor="middle"
+              font-family="-apple-system, 'Segoe UI', Roboto, sans-serif"
+              font-size="22" letter-spacing="7" fill="#c9a893">EDERLYN&#160;H.&#160;CAPARAS</text>
+          </svg>
         </figure>
       </div>
     </section>

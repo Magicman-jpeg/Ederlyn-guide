@@ -347,15 +347,14 @@ img {
   max-width: 320px;
   width: 100%;
 }
-.hero__portrait picture,
+.hero__portrait .portrait,
 .hero__portrait img {
+  display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-lg);
-}
-.hero__portrait img {
   aspect-ratio: 5 / 6;
   object-fit: cover;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-lift);
 }
