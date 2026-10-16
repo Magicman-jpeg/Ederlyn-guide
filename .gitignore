@@ -1,0 +1,9 @@
+# Dependencies (install locally with `npm install` only if using scripts/)
+node_modules/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Local build input for the portrait (place your source photo here)
+raw/

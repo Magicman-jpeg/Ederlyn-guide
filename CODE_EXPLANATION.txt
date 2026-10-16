@@ -1,0 +1,526 @@
+===============================================================================
+ CODE EXPLANATION — Ederlyn H. Caparas Portfolio Website
+===============================================================================
+
+This document explains, in plain language, how the portfolio website is built.
+It is written for beginners: if you have just started learning web development,
+you should be able to read it top to bottom and understand every part.
+
+The project is intentionally simple and dependency-free in spirit. The core
+site is pure HTML, CSS, and JavaScript — no framework, no build step. The only
+external script is anime.js, loaded from a CDN for subtle entrance animation;
+the site works perfectly even if that script never loads.
+
+Files in the project:
+
+    index.html             -> the content & structure (what you see)
+    styles.css             -> the appearance (color, spacing, layout, motion)
+    script.js              -> the behavior (theme, reveals, smooth scroll)
+    assets/                -> the portrait images in WebP (640w and 1280w)
+    scripts/               -> helper Node tools (image conversion, placeholder,
+                              screenshots) — NOT needed to run the site
+    CODE_EXPLANATION.txt   -> this document
+
+You can open index.html directly in a browser and it just works.
+
+
+-------------------------------------------------------------------------------
+ DESIGN PHILOSOPHY (why it looks the way it does)
+-------------------------------------------------------------------------------
+
+The visual design intentionally avoids the over-saturated, generic "AI" look
+(glowing gradient blobs, glassmorphism everywhere, particles). Instead it draws
+on two well-known sets of design principles:
+
+  * Apple's Human Interface Guidelines — craft (care about every detail),
+    simplicity (remove the unnecessary, but keep what's needed), clear
+    hierarchy, familiar patterns, and "delight as the sum of care" rather than
+    decoration for its own sake.
+
+  * Vercel's Web Interface Guidelines — concrete engineering details such as
+    visible :focus-visible rings that are never hidden by the sticky header,
+    generous tap targets, honoring prefers-reduced-motion, animating only
+    cheap GPU properties (transform/opacity) and never "transition: all",
+    layered shadows, nested border radii, hue-tinted borders, tabular numbers,
+    curly quotes, and non-breaking spaces for names that shouldn't wrap.
+
+Content was rephrased for compliance with licensing restrictions.
+
+The result is an editorial, typography-first layout: generous whitespace, a
+single warm terracotta accent, crisp borders, and quiet hover motion.
+
+
+===============================================================================
+ PART 1 — HTML STRUCTURE  (index.html)
+===============================================================================
+
+HTML describes WHAT is on the page. We use "semantic" HTML5 — tags chosen for
+their meaning, not just <div> everywhere — which helps screen readers, search
+engines, and other developers understand the page.
+
+-------------------------------------------------------------------------------
+ 1.1  The document shell (<head>)
+-------------------------------------------------------------------------------
+
+    <!DOCTYPE html>                  modern HTML rules.
+    <html lang="en" data-theme="light">
+                                     lang helps pronunciation; data-theme is a
+                                     custom attribute we flip for dark mode.
+
+Inside <head> (information ABOUT the page, not visible content):
+    - <meta charset="UTF-8">         supports all characters/emoji.
+    - <meta name="viewport" ...>     makes the site responsive on phones.
+    - <meta name="description">      the summary search engines may show.
+    - <meta name="theme-color">      tints the mobile browser's UI bar to match
+                                     the page background (JS keeps it in sync).
+    - <meta name="color-scheme">     tells the browser we support light & dark
+                                     so native controls/scrollbars get correct
+                                     contrast.
+    - Open Graph (og:*) tags         give a nicer link preview when shared.
+    - <link rel="stylesheet" ...>    loads our CSS.
+
+-------------------------------------------------------------------------------
+ 1.2  Why these semantic tags?
+-------------------------------------------------------------------------------
+
+    <header>   top banner holding the navigation.
+    <nav>      the navigation region (brand, links, theme button).
+    <main>     THE one main content area (only one per page).
+    <section>  a thematic group of content (Hero, About, Skills, etc.).
+    <article>  a self-contained block (each skill card, each project).
+    <figure>   wraps the portrait image as self-contained media.
+    <footer>   the closing region (contact info + copyright).
+
+-------------------------------------------------------------------------------
+ 1.3  Document hierarchy (the outline)
+-------------------------------------------------------------------------------
+
+    header > nav (brand, links, theme toggle)
+    main
+      section#hero          -> name, title, location, buttons, portrait
+      section#about         -> short bio + education timeline
+      section#skills        -> grid of skill cards
+      section#projects      -> academic / technical projects
+      section#experience    -> volunteer / organizational timeline
+    footer#contact          -> email, phone, GitHub, location, copyright
+
+Headings follow a logical order: one <h1> (the name), <h2> per section, <h3>
+for sub-items. We never skip levels — good for accessibility and SEO.
+
+-------------------------------------------------------------------------------
+ 1.4  Accessibility details
+-------------------------------------------------------------------------------
+
+    - Skip link: the first element lets keyboard users Tab once and jump to
+      #main, skipping the menu. It is off-screen until focused.
+    - aria-labelledby: each <section> points to its heading's id, naming it for
+      assistive tech.
+    - aria-label: on the nav and the icon theme button (an icon alone has no
+      text, so we supply one).
+    - aria-pressed on the toggle: announces whether dark mode is on; JS updates
+      it on every toggle.
+    - aria-hidden="true": on decorative bits (the "EC" mark, section numbers,
+      inline SVG icons) so screen readers skip the noise.
+    - Semantics before ARIA: we use real <a> and <button> elements rather than
+      clickable <div>s, so keyboard and browser behaviors work for free.
+
+-------------------------------------------------------------------------------
+ 1.5  Typographic polish you can copy
+-------------------------------------------------------------------------------
+
+    - HTML entities for correct punctuation: &rsquo; (curly apostrophe),
+      &mdash; (em dash), &ndash; (en dash), &middot; (dot), and &hellip;.
+    - &nbsp; (non-breaking space) keeps names/phone digits from splitting
+      awkwardly across lines, e.g. "Ederlyn&nbsp;H.&nbsp;Caparas".
+    - translate="no" on brand/product names, code tokens, and the email so
+      browser auto-translate leaves them intact.
+
+-------------------------------------------------------------------------------
+ 1.6  The responsive portrait (<picture>)
+-------------------------------------------------------------------------------
+
+    <picture>
+      <source type="image/webp"
+        srcset="assets/ederlyn-640.webp 640w, assets/ederlyn-1280.webp 1280w"
+        sizes="(min-width: 860px) 320px, 70vw" />
+      <img src="assets/ederlyn-640.webp" width="640" height="768"
+           alt="Portrait of Ederlyn H. Caparas" decoding="async" />
+    </picture>
+
+    - WebP is a small, modern image format (smaller than JPG/PNG at the same
+      quality), so the page loads fast.
+    - srcset + sizes let the browser pick the 640px or 1280px file based on the
+      screen and pixel density (retina) — it never downloads more than needed.
+    - width/height on <img> reserve space so the layout doesn't "jump" while the
+      image loads (this avoids Cumulative Layout Shift / CLS).
+    - alt text describes the image for screen readers and when images are off.
+
+    NOTE: the images currently in assets/ are a tasteful generated placeholder.
+    To use the real headshot, see Part 5 (Replacing the portrait).
+
+-------------------------------------------------------------------------------
+ 1.7  Links that "do" things
+-------------------------------------------------------------------------------
+
+    - href="#projects"            jumps to the section with id="projects".
+    - href="mailto:...@gmail.com" opens the user's email app.
+    - href="tel:+639940258251"    lets phones start a call (international
+                                  format: +63 for the Philippines, 0 dropped).
+    - GitHub link opens in a new tab with rel="noopener noreferrer" for safety.
+
+
+===============================================================================
+ PART 2 — CSS ARCHITECTURE  (styles.css)
+===============================================================================
+
+CSS describes HOW the page looks. The file is ordered: tokens -> reset -> base
+-> components -> reveal -> responsive -> reduced-motion.
+
+-------------------------------------------------------------------------------
+ 2.1  Custom properties (variables) in :root
+-------------------------------------------------------------------------------
+
+At the top, ":root { ... }" defines reusable values, e.g.:
+
+    --space-md: 1.25rem;
+    --accent: #b4531f;
+    --radius-lg: 16px;
+
+Used everywhere with var():  padding: var(--space-md);
+
+Why: consistency (every "medium" gap is identical), single place to change, and
+easy theming (dark mode just redefines the same names).
+
+-------------------------------------------------------------------------------
+ 2.2  Light & dark theming with tokens
+-------------------------------------------------------------------------------
+
+Light values live in :root (the default). Dark values OVERRIDE the same names
+inside a selector that only applies when <html data-theme="dark">:
+
+    [data-theme="dark"] { --bg: #121110; --text: #efece7; --accent: #e07b47; ... }
+
+Because every component uses var(--bg), var(--text), etc., flipping the single
+data-theme attribute on <html> re-skins the whole page. JavaScript does the
+flipping (Part 3). Each theme also sets `color-scheme` so native UI (scrollbars,
+form controls) matches.
+
+-------------------------------------------------------------------------------
+ 2.3  Fluid typography with clamp()
+-------------------------------------------------------------------------------
+
+    --fs-hero: clamp(2.6rem, 6.5vw, 4.75rem);
+
+clamp(MIN, PREFERRED, MAX) scales text with the viewport (6.5vw) but never below
+2.6rem or above 4.75rem — responsive type without many media queries.
+
+text-wrap: balance (on headings) and text-wrap: pretty (on paragraphs) ask the
+browser to avoid ugly single-word last lines ("widows").
+
+-------------------------------------------------------------------------------
+ 2.4  Reset & base
+-------------------------------------------------------------------------------
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    - border-box makes width/height include padding + border (easier layouts).
+    - Zeroing margins/padding removes inconsistent browser defaults.
+
+html gets smooth scrolling and scroll-padding-top so jumping to a section
+doesn't hide its title behind the sticky header.
+
+-------------------------------------------------------------------------------
+ 2.5  Layout: Flexbox vs. Grid
+-------------------------------------------------------------------------------
+
+FLEXBOX (one dimension — a row or column):
+    - .nav            brand left, links middle, toggle right.
+    - .hero__actions  the row of buttons.
+    - .tag-list       pills that wrap to new lines.
+
+GRID (two dimensions — rows AND columns):
+    - .hero__grid     intro beside portrait on desktop; stacked on mobile.
+    - .skills-grid    1 column on phones, 2 on wider screens.
+    - .about          bio column next to education column on desktop.
+    - .project        a fixed number column + a flexible content column.
+    - .contact-list   stacks on mobile, up to 4 columns on desktop.
+
+.container centers content and caps width (max-width) so lines don't stretch
+too wide on big monitors.
+
+-------------------------------------------------------------------------------
+ 2.6  Components & craft details
+-------------------------------------------------------------------------------
+
+Class names use a BEM-like pattern: block, block__element, block--modifier
+(e.g. .card, .card__title, .btn--primary).
+
+Craft touches borrowed from the design guidelines:
+    - Layered shadows: --shadow and --shadow-lift each combine TWO shadow
+      layers (a tight ambient one + a soft directional one) and are tinted
+      toward the warm hue instead of neutral grey — more realistic depth.
+    - Nested radii: the container radius (--radius-lg: 16px) is larger than
+      inner elements, so corners stay visually concentric.
+    - Hue-tinted borders: --border leans warm, not pure grey, matching the
+      palette.
+    - Underlines animate with transform: scaleX() (cheap/GPU-friendly) using
+      transform-origin so they grow from the left.
+    - Hover states increase contrast and lift elements a few pixels — feedback
+      that something is interactive, never gratuitous.
+    - tabular-nums on numbers (years, section indices) so digits line up.
+
+-------------------------------------------------------------------------------
+ 2.7  Scroll-reveal styles (progressive enhancement)
+-------------------------------------------------------------------------------
+
+Elements marked data-reveal start slightly lower and transparent ONLY when
+JavaScript is active (the .js class, added by script.js) and motion is allowed:
+
+    .js [data-reveal]            { opacity: 0; transform: translateY(16px); }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+If JS is OFF, the .js class is never added, so content is fully visible — the
+page is never blank. JavaScript adds .is-visible as each item scrolls in.
+
+-------------------------------------------------------------------------------
+ 2.8  Responsiveness (mobile-first media queries)
+-------------------------------------------------------------------------------
+
+Base styles target small screens; we ADD layout as the screen grows:
+
+    @media (min-width: 640px)  tablets: skills 2 cols, contact 2 cols.
+    @media (min-width: 860px)  desktops: show nav links, hero becomes two
+                               columns (intro + portrait), about two columns,
+                               contact 4 columns.
+
+-------------------------------------------------------------------------------
+ 2.9  Respecting user preferences
+-------------------------------------------------------------------------------
+
+    @media (prefers-reduced-motion: reduce) { ... }
+
+If a visitor asked their OS to reduce motion, we turn off smooth scrolling,
+shrink transitions to near-zero, AND force reveal elements fully visible (so
+reduced motion never leaves content hidden).
+
+:focus-visible gives keyboard users a clear focus ring without showing it on
+ordinary mouse clicks.
+
+
+===============================================================================
+ PART 3 — JAVASCRIPT LOGIC  (script.js)
+===============================================================================
+
+JavaScript adds BEHAVIOR. The whole file is wrapped in an IIFE:
+
+    (function () { "use strict"; ... })();
+
+This keeps variables private (nothing leaks onto window) and "use strict" turns
+on safer rules.
+
+The very first line adds a "js" class to <html>:
+
+    document.documentElement.classList.add("js");
+
+That is how the CSS knows JS is on (so it can safely hide reveal elements until
+they animate). No JS -> no "js" class -> content stays visible.
+
+-------------------------------------------------------------------------------
+ 3.1  Theme (persistent light/dark)
+-------------------------------------------------------------------------------
+
+Key references:
+    - document.documentElement is <html> — we set data-theme on it.
+    - getElementById("theme-toggle") grabs the button; querySelector finds the
+      small label inside it.
+
+getInitialTheme() priority:
+    1. A SAVED choice in localStorage.
+    2. The OS preference: matchMedia("(prefers-color-scheme: dark)").matches.
+    3. Fall back to light.
+   localStorage reads are wrapped in try/catch because private mode can throw.
+
+applyTheme(theme):
+    - root.setAttribute("data-theme", theme)  <- the heart of theming; this one
+      line re-skins everything via the CSS variables.
+    - updates the <meta name="theme-color"> so the mobile browser bar matches.
+    - syncs the button's aria-pressed, aria-label, and visible label.
+
+saveTheme(theme) writes to localStorage (also try/catch guarded).
+toggleTheme() reads the current theme, flips it, applies + saves.
+
+Wiring:
+    applyTheme(getInitialTheme());                      // set on load
+    toggleBtn.addEventListener("click", toggleTheme);   // react to clicks
+
+We also listen for live OS theme changes and follow them ONLY if the user has
+not manually chosen a theme on this site. (Older Safari used addListener
+instead of addEventListener, so both are handled.)
+
+-------------------------------------------------------------------------------
+ 3.2  Scroll reveal (anime.js with graceful fallback)
+-------------------------------------------------------------------------------
+
+We collect every data-reveal element into an array.
+
+If the browser prefers reduced motion OR lacks IntersectionObserver, we call
+revealAll() immediately — correctness over flourish.
+
+Otherwise we create an IntersectionObserver: a browser API that efficiently
+tells us when an element scrolls into view (no scroll-event spam). When an
+element enters:
+    - If anime.js loaded (window.anime is a function), we animate opacity 0->1
+      and translateY 16->0 with a smooth cubic-bezier easing. anime.js only
+      touches opacity and transform, which are GPU-friendly.
+    - If anime.js did NOT load, we simply add the .is-visible class and let the
+      CSS transition do the fade/slide. Either way the content appears.
+A tiny stagger (by DOM order) makes groups feel composed rather than popping in
+all at once. Each element is unobserved after it reveals (do the work once).
+
+Two safety nets guarantee content is NEVER stuck hidden:
+    - on window load, reveal anything already within the viewport;
+    - after 2.5s, force-reveal anything still hidden (covers a failed CDN, an
+      odd layout, or automated full-page captures).
+
+-------------------------------------------------------------------------------
+ 3.3  Smooth scrolling with focus (accessible)
+-------------------------------------------------------------------------------
+
+    document.querySelectorAll('a[href^="#"]')  selects all in-page links.
+
+For each, on click we:
+    1. find the target with querySelector,
+    2. event.preventDefault() to stop the instant jump,
+    3. target.scrollIntoView({ behavior: "smooth" }) (or "auto" if reduced
+       motion),
+    4. set tabindex="-1" and focus() the target so keyboard / screen-reader
+       users actually land INSIDE the section.
+
+-------------------------------------------------------------------------------
+ 3.4  Dynamic copyright year
+-------------------------------------------------------------------------------
+
+    document.getElementById("year").textContent =
+        String(new Date().getFullYear());
+
+The footer year updates itself — no manual edit each January.
+
+-------------------------------------------------------------------------------
+ 3.5  About anime.js
+-------------------------------------------------------------------------------
+
+anime.js is a small, popular animation library, loaded via one CDN <script> tag
+in index.html with the `defer` attribute (so it doesn't block page rendering).
+It is strictly an enhancement: every feature degrades gracefully, and the site
+is fully usable and attractive if the script is blocked or offline.
+
+
+===============================================================================
+ PART 4 — DEPLOYMENT GUIDE
+===============================================================================
+
+Because the site is static files, hosting is free and easy. Pick ONE option.
+Make sure index.html, styles.css, script.js, and the assets/ folder are
+uploaded together (index.html references them by relative path).
+
+The scripts/ folder and any node_modules/ or package*.json are build-time
+helpers only — you do NOT need to deploy them for the site to work.
+
+-------------------------------------------------------------------------------
+ OPTION A — GitHub Pages
+-------------------------------------------------------------------------------
+
+1. Create a GitHub account at https://github.com (if needed).
+2. Create a repository (e.g. "portfolio"); public is fine.
+3. Upload the files:
+   Web: "Add file" -> "Upload files", drag in index.html, styles.css,
+   script.js, the assets/ folder (and this .txt if you like), then "Commit".
+
+   Or with Git:
+       git add index.html styles.css script.js assets CODE_EXPLANATION.txt
+       git commit -m "Add portfolio site"
+       git branch -M main
+       git remote add origin https://github.com/YOUR-USERNAME/portfolio.git
+       git push -u origin main
+
+4. Enable Pages: repo -> Settings -> Pages -> Source "Deploy from a branch",
+   Branch "main", Folder "/ (root)" -> Save.
+5. Wait ~1 minute, refresh; your URL appears, usually:
+       https://YOUR-USERNAME.github.io/portfolio/
+   (Naming the repo exactly "YOUR-USERNAME.github.io" publishes at the root.)
+6. To update later, commit/push again — Pages redeploys automatically.
+
+-------------------------------------------------------------------------------
+ OPTION B — Vercel
+-------------------------------------------------------------------------------
+
+Method 1 — connect a Git repo (easy updates):
+   1. Push the files to a GitHub/GitLab/Bitbucket repo (Option A, steps 1-3).
+   2. Sign up at https://vercel.com (you can use GitHub login).
+   3. "Add New..." -> "Project" -> Import your repository.
+   4. Framework Preset "Other"; leave Build Command and Output Directory EMPTY
+      (nothing to build — static files).
+   5. "Deploy". You get a URL like https://portfolio-yourname.vercel.app
+   6. Every future push auto-deploys.
+
+Method 2 — drag & drop (no Git):
+   1. Install once:   npm i -g vercel
+   2. In the project folder run:   vercel   (accept defaults; it returns a URL).
+
+-------------------------------------------------------------------------------
+ Local preview
+-------------------------------------------------------------------------------
+
+   - Simplest: double-click index.html.
+   - Or run a tiny server from the project folder:
+         Python 3:   python -m http.server 8000     -> http://localhost:8000
+         Node:       npx serve
+
+
+===============================================================================
+ PART 5 — REPLACING THE PORTRAIT WITH THE REAL PHOTO
+===============================================================================
+
+The images in assets/ (ederlyn-640.webp, ederlyn-1280.webp) are currently a
+generated placeholder. To use the real headshot, choose one:
+
+Easiest (no tools) — upload directly on GitHub:
+   1. Prepare two WebP files named exactly:
+         ederlyn-640.webp   (about 640px wide)
+         ederlyn-1280.webp  (about 1280px wide, for retina screens)
+      You can convert a JPG/PNG to WebP with any online image converter or a
+      photo tool that exports WebP.
+   2. In the repo, open the assets/ folder -> "Add file" -> "Upload files",
+      drop both in (overwriting the placeholders) -> "Commit changes".
+   That's it — index.html already points at those names.
+
+With the included helper (if you have Node locally):
+   1. Put the original photo somewhere, e.g. raw/ederlyn.jpg
+   2. Run:  npm install        (installs the "sharp" image library once)
+            node scripts/convert-to-webp.js raw/ederlyn.jpg ederlyn
+      This writes assets/ederlyn-640.webp and assets/ederlyn-1280.webp,
+      correctly oriented and optimized.
+   3. Commit the updated assets/.
+
+If the photo isn't a 5:6 portrait, the CSS crops it neatly to that ratio via
+object-fit: cover, so faces stay centered.
+
+
+===============================================================================
+ PART 6 — THE scripts/ FOLDER (optional build helpers)
+===============================================================================
+
+These Node scripts are conveniences used while building the site. They are NOT
+required to view or deploy it.
+
+    convert-to-webp.js   Converts a source photo into the two responsive WebP
+                         sizes used by the portrait. Needs the "sharp" package.
+    make-placeholder.js  Generates the tasteful monogram placeholder currently
+                         in assets/ (used until the real photo is added).
+    shot.js              Renders the page in a headless browser and saves
+                         light/dark/mobile screenshots — handy for reviewing
+                         the design.
+
+===============================================================================
+ END OF DOCUMENT
+===============================================================================
