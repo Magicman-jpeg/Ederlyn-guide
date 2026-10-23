@@ -42,35 +42,35 @@
 
   /* ---- Light palette (default) ---- */
   color-scheme: light;
-  --bg: #fbfbfa;
-  --bg-alt: #f3f1ed;
+  --bg: #fafbfc;
+  --bg-alt: #eef1f6;
   --surface: #ffffff;
-  --text: #191714;
-  --text-soft: #5c574f;
-  /* Borders tinted toward the warm hue, not pure grey */
-  --border: #e6e1d8;
-  --accent: #b4531f;
-  --accent-soft: #c9743e;
+  --text: #121620;
+  --text-soft: #515a6b;
+  /* Borders tinted toward the navy hue, not pure grey */
+  --border: #d9dfe9;
+  --accent: #1e3a8a;
+  --accent-soft: #2f52b5;
   --accent-contrast: #ffffff;
-  /* Layered shadow: ambient + direct, hue-tinted */
-  --shadow: 0 1px 2px rgba(60, 40, 20, 0.05),
-    0 10px 30px -8px rgba(60, 40, 20, 0.1);
-  --shadow-lift: 0 2px 4px rgba(60, 40, 20, 0.07),
-    0 20px 40px -12px rgba(60, 40, 20, 0.16);
+  /* Layered shadow: ambient + direct, tinted toward navy */
+  --shadow: 0 1px 2px rgba(20, 35, 75, 0.06),
+    0 10px 30px -8px rgba(20, 35, 75, 0.12);
+  --shadow-lift: 0 2px 4px rgba(20, 35, 75, 0.09),
+    0 20px 40px -12px rgba(20, 35, 75, 0.18);
 }
 
 /* ---- Dark palette ---- */
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #121110;
-  --bg-alt: #1a1917;
-  --surface: #1e1d1a;
-  --text: #efece7;
-  --text-soft: #a6a097;
-  --border: #322f29;
-  --accent: #e07b47;
-  --accent-soft: #e89468;
-  --accent-contrast: #171310;
+  --bg: #0b0f18;
+  --bg-alt: #121726;
+  --surface: #161d30;
+  --text: #e9edf5;
+  --text-soft: #99a2b8;
+  --border: #253049;
+  --accent: #6b8ff0;
+  --accent-soft: #8aa6f5;
+  --accent-contrast: #0b0f18;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.5),
     0 10px 30px -8px rgba(0, 0, 0, 0.45);
   --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.55),

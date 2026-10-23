@@ -54,7 +54,7 @@
 
     // Keep the browser chrome color in sync with the page background.
     if (themeColorMeta) {
-      themeColorMeta.setAttribute("content", theme === DARK ? "#121110" : "#fbfbfa");
+      themeColorMeta.setAttribute("content", theme === DARK ? "#0b0f18" : "#fafbfc");
     }
 
     if (!toggleBtn) return;
